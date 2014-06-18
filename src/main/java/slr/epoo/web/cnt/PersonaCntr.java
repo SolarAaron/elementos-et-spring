@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Aaron
  */
 @Controller
-@RequestMapping("/hola")
+@RequestMapping("/usuarios")
 public class PersonaCntr {
-    @RequestMapping(method=RequestMethod.GET, value="/message", headers = {"Accept=text/html"})
+    @RequestMapping(method=RequestMethod.GET, value="/todos", headers = {"Accept=text/html"})
     public @ResponseBody String resp(){
-        return "Servicio REST/Spring";
+        return "probando metodo todos";
     }
     
 }

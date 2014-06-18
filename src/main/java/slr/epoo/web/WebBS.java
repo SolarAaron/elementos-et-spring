@@ -26,9 +26,7 @@ public class WebBS extends AbstractAnnotationConfigDispatcherServletInitializer{
 
     @Override
     protected String[] getServletMappings() {
-        return new String[]{
-            "/util/*"
-        };
+        return new String[]{"/util/*"};
     }
     
 }
