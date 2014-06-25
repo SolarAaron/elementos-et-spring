@@ -3,6 +3,7 @@
   <persistence-unit name="slr.eloo.web_mvn-web-spr_war_1.0PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>slr.epoo.web.mdl.hib.PruebaN</class>
+    <class>slr.epoo.web.mdl.Usuario</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=convertToNull"/>
