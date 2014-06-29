@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package slr.epoo.web.mdl;
+package slr.unused.epoo.web.mdl;
 
 import slr.lib.Author;
 

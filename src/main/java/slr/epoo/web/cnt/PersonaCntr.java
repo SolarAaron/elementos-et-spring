@@ -8,6 +8,8 @@ package slr.epoo.web.cnt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/usuarios")
 public class PersonaCntr {
+    private static final Logger logger = Logger.getLogger(PersonaCntr.class.getName());
+    
     @RequestMapping(method=RequestMethod.GET, value="/todos", headers = {"Accept=text/html"})
     public @ResponseBody String resp(){
         return "probando metodo todos";
@@ -34,9 +38,10 @@ public class PersonaCntr {
         ObjectMapper mp = new ObjectMapper();
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
             JsonGenerator jg = mp.getJsonFactory().createJsonGenerator(out, JsonEncoding.UTF8);
-            jg.writeObject(new slr.epoo.web.mdl.Usuario());
+            jg.writeObject(new slr.epoo.web.mdl.Usuario("Aaron", "nomnom", '1'));
             res = out.toString();
         }
+        logger.log(Level.INFO, res);
         return res;
     }
     

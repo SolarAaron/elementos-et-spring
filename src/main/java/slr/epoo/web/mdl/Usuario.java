@@ -25,76 +25,38 @@ import javax.validation.constraints.Size;
 @Table(name = "usuario")
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
-    @NamedQuery(name = "Usuario.findByPaterno", query = "SELECT u FROM Usuario u WHERE u.paterno = :paterno"),
-    @NamedQuery(name = "Usuario.findByUsuario", query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario"),
+    @NamedQuery(name = "Usuario.findByLogin", query = "SELECT u FROM Usuario u WHERE u.login = :login"),
     @NamedQuery(name = "Usuario.findByPassword", query = "SELECT u FROM Usuario u WHERE u.password = :password"),
-    @NamedQuery(name = "Usuario.findByRolAdmin", query = "SELECT u FROM Usuario u WHERE u.rolAdmin = :rolAdmin")})
+    @NamedQuery(name = "Usuario.findByAdminRol", query = "SELECT u FROM Usuario u WHERE u.adminRol = :adminRol")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 80)
-    @Column(name = "nombre")
-    private String nombre;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 80)
-    @Column(name = "paterno")
-    private String paterno;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "usuario")
-    private String usuario;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
+    @Size(min = 1, max = 40)
+    @Column(name = "login")
+    private String login;
+    @Size(max = 40)
     @Column(name = "password")
     private String password;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "rol_admin")
-    private char rolAdmin;
+    @Column(name = "admin_rol")
+    private Character adminRol;
 
     public Usuario() {
     }
 
-    public Usuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public Usuario(String usuario, String nombre, String paterno, String password, char rolAdmin) {
-        this.usuario = usuario;
-        this.nombre = nombre;
-        this.paterno = paterno;
+    public Usuario(String login, String password, Character adminRol) {
+        this.login = login;
         this.password = password;
-        this.rolAdmin = rolAdmin;
+        this.adminRol = adminRol;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getLogin() {
+        return login;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getPaterno() {
-        return paterno;
-    }
-
-    public void setPaterno(String paterno) {
-        this.paterno = paterno;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
@@ -105,18 +67,18 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
-    public char getRolAdmin() {
-        return rolAdmin;
+    public Character getAdminRol() {
+        return adminRol;
     }
 
-    public void setRolAdmin(char rolAdmin) {
-        this.rolAdmin = rolAdmin;
+    public void setAdminRol(Character adminRol) {
+        this.adminRol = adminRol;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (usuario != null ? usuario.hashCode() : 0);
+        hash += (login != null ? login.hashCode() : 0);
         return hash;
     }
 
@@ -127,7 +89,7 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.usuario == null && other.usuario != null) || (this.usuario != null && !this.usuario.equals(other.usuario))) {
+        if ((this.login == null && other.login != null) || (this.login != null && !this.login.equals(other.login))) {
             return false;
         }
         return true;
@@ -135,7 +97,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "slr.epoo.web.mdl.Usuario[ usuario=" + usuario + " ]";
+        return "slr.epoo.web.mdl.Usuario[ login=" + login + " ]";
     }
     
 }
