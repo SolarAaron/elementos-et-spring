@@ -8,8 +8,8 @@ package slr.epoo.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import slr.unused.epoo.web.mdl.CuentaChistes;
-import slr.unused.epoo.web.mdl.IPersona;
+import slr.epoo.web.unused.mdl.CuentaChistes;
+import slr.epoo.web.unused.mdl.IPersona;
 
 /**
  *

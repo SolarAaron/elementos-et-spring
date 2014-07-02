@@ -4,13 +4,13 @@
  * and open the template in the editor.
  */
 
-package slr.unused.epoo.web.mdl;
+package slr.epoo.web.unused.mdl;
 
 import slr.lib.Author;
 
 @Author(name = "Aaron", version="0.0.1")
 public class Cantante implements IPersona {
-    
+
     public Cantante(){
     }
 
@@ -18,5 +18,5 @@ public class Cantante implements IPersona {
     public String ejecutarGracia() {
         return "Ay larari larara";
     }
-    
+
 }
