@@ -1,0 +1,1 @@
+create table Usuario(id int not null primary key, nombre varchar(40), salario float);

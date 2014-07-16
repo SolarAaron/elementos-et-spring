@@ -16,69 +16,71 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Aaron
+ * @author T107
  */
 @Entity
 @Table(name = "usuario")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findByLogin", query = "SELECT u FROM Usuario u WHERE u.login = :login"),
-    @NamedQuery(name = "Usuario.findByPassword", query = "SELECT u FROM Usuario u WHERE u.password = :password"),
-    @NamedQuery(name = "Usuario.findByAdminRol", query = "SELECT u FROM Usuario u WHERE u.adminRol = :adminRol")})
+    @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
+    @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
+    @NamedQuery(name = "Usuario.findBySalario", query = "SELECT u FROM Usuario u WHERE u.salario = :salario")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 40)
-    @Column(name = "login")
-    private String login;
+    @Column(name = "id")
+    private Integer id;
     @Size(max = 40)
-    @Column(name = "password")
-    private String password;
-    @Column(name = "admin_rol")
-    private Character adminRol;
+    @Column(name = "nombre")
+    private String nombre;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "salario")
+    private Float salario;
 
     public Usuario() {
     }
 
-    public Usuario(String login, String password, Character adminRol) {
-        this.login = login;
-        this.password = password;
-        this.adminRol = adminRol;
+    public Usuario(Integer id, String nombre, Float salario) {
+        this.id = id;
+        this.nombre = nombre;
+        this.salario = salario;
     }
 
-    public String getLogin() {
-        return login;
+    public Integer getId() {
+        return id;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getPassword() {
-        return password;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public Character getAdminRol() {
-        return adminRol;
+    public Float getSalario() {
+        return salario;
     }
 
-    public void setAdminRol(Character adminRol) {
-        this.adminRol = adminRol;
+    public void setSalario(Float salario) {
+        this.salario = salario;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (login != null ? login.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -89,7 +91,7 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.login == null && other.login != null) || (this.login != null && !this.login.equals(other.login))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -97,7 +99,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "slr.epoo.web.mdl.Usuario[ login=" + login + " ]";
+        return "slr.epoo.web.mdl.Usuario[ id=" + id + " ]";
     }
     
 }

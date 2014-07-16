@@ -9,16 +9,20 @@ package slr.epoo.web.cnt;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import slr.epoo.web.lib.SessionDAO;
 import slr.epoo.web.mdl.Usuario;
 
 /**
@@ -36,11 +40,20 @@ public class PersonaCntr {
     }
     
     public static ArrayList<Usuario> getUsers(){
-        ArrayList<Usuario> a = new ArrayList<>();
-        a.add(new Usuario("jcampos", "xxx", 'Y'));
-        a.add(new Usuario("analopez", "yyy", 'Y'));
-        a.add(new Usuario("pedroperez", "www", 'N'));
-        return a;
+        ArrayList<Usuario> res;
+        try(SessionDAO sd = new SessionDAO()){
+            Session ss = SessionDAO.getSession();
+            Query qq;
+            Criteria cc;
+            ss.getTransaction().begin();
+            cc = ss.createCriteria(Usuario.class);
+            res =  (ArrayList<Usuario>) cc.list();
+        } catch(Exception e){
+            res = new ArrayList<>();
+            logger.log(Level.WARNING, "Excepcion en getUsers");
+        }
+        
+        return res;
     }
 
     @RequestMapping(method = RequestMethod.GET, value="/usuario", headers = {"Accept=Application/JSON"})
@@ -51,7 +64,7 @@ public class PersonaCntr {
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
             JsonGenerator jg = ob.getJsonFactory().createJsonGenerator(out);
             ArrayList<Usuario> a = PersonaCntr.getUsers();
-            jg.writeObject(a);
+            jg.writeObject(Collections.singletonMap("object", a));
             res = out.toString();
         }
         logger.log(Level.INFO, res);

@@ -9,27 +9,26 @@ package slr.epoo.web.lib;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
+import slr.epoo.web.HibernateBS;
 
 
 /**
  *
  * @author Aaron
  */
-public class SessionDAO {
+public class SessionDAO implements AutoCloseable{
     private static final Logger logger = Logger.getLogger(SessionDAO.class.getName());
     private static ThreadLocal tt = new ThreadLocal();
-    private final static SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 
     public SessionDAO() {
+        logger.log(Level.INFO, "Abierta conexion");
     }
     
     public static Session getSession(){
         Session ss = (Session) tt.get();
         if(ss == null){
-            ss = sessionFactory.openSession();
+            ss = HibernateBS.getSessionFactory().openSession();
             tt.set(ss);
         }
         return ss;
@@ -52,5 +51,12 @@ public class SessionDAO {
             tt.set(null);
             logger.log(Level.WARNING, e.getMessage());
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+        getSession().close();
+        tt.set(null);
+        logger.log(Level.INFO, "Cerrada conexion");
     }
 }
