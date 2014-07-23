@@ -22,9 +22,9 @@ public class SessionDAO implements AutoCloseable{
     private static ThreadLocal tt = new ThreadLocal();
 
     public SessionDAO() {
-        logger.log(Level.INFO, "Abierta conexion");
+        //logger.log(Level.INFO, "Abierta conexion");
     }
-    
+
     public static Session getSession(){
         Session ss = (Session) tt.get();
         if(ss == null){
@@ -33,15 +33,15 @@ public class SessionDAO implements AutoCloseable{
         }
         return ss;
     }
-    
+
     protected void begin(){
         getSession().beginTransaction();
     }
-    
+
     protected void commit(){
         getSession().getTransaction().commit();
     }
-    
+
     protected void rollback(){
         try{
             getSession().getTransaction().rollback();
@@ -55,8 +55,8 @@ public class SessionDAO implements AutoCloseable{
 
     @Override
     public void close() throws Exception {
-        getSession().close();
+        getSession().disconnect();
         tt.set(null);
-        logger.log(Level.INFO, "Cerrada conexion");
+        //logger.log(Level.INFO, "Cerrada conexion");
     }
 }
