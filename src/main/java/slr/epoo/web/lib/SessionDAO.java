@@ -9,7 +9,7 @@ package slr.epoo.web.lib;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
+import org.hibernate.classic.Session;
 import slr.epoo.web.HibernateBS;
 
 

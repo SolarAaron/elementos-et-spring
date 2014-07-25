@@ -17,7 +17,7 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.Session;
+import org.hibernate.classic.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,7 +52,7 @@ public class PersonaCntr {
             res =  (ArrayList<Usuario>) cc.list();
         } catch(Exception e){
             res = new ArrayList<>();
-            logger.log(Level.WARNING, "Excepcion en getUsers: {0}", e.getStackTrace());
+            logger.log(Level.WARNING, "Excepcion en getUsers: {0}", e.getMessage());
         } finally{
             SessionDAO.getSession().close();
         }
@@ -65,7 +65,7 @@ public class PersonaCntr {
         try{
             Session ss = SessionDAO.getSession();
             Transaction tt = ss.beginTransaction();
-            // u.setId(ss.createCriteria(Usuario.class).list().size());
+            u.setId(ss.createCriteria(Usuario.class).list().size());
             ss.save(u);
             tt.commit();
             if(! tt.wasCommitted()){
