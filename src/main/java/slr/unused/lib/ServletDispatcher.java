@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package slr.lib;
+package slr.unused.lib;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @Author(name="Aaron", version="1.0.0")
 @WebServlet(name = "SvrUtil", urlPatterns = {"/util.php"})
 public class ServletDispatcher extends HttpServlet {
-    
+
     private static final Logger logger = Logger.getLogger(ServletDispatcher.class.getName());
 
     /**

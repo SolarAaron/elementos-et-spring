@@ -7,5 +7,6 @@
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/solar?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <mapping class="slr.epoo.web.mdl.Usuario"></mapping>
+    <mapping class="slr.epoo.web.mdl.Nomina"></mapping>
   </session-factory>
 </hibernate-configuration>

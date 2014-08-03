@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package slr.epoo.web.lib;
 
 import java.util.logging.Level;
@@ -17,19 +11,28 @@ import slr.epoo.web.HibernateBS;
  *
  * @author Aaron
  */
-public class SessionDAO implements AutoCloseable{
-    private static final Logger logger = Logger.getLogger(SessionDAO.class.getName());
-    private static ThreadLocal tt = new ThreadLocal();
+public class SessionUtil implements AutoCloseable{
+    private static final Logger logger = Logger.getLogger(SessionUtil.class.getName());
+    private static ThreadLocal<Session> tt = new ThreadLocal<>();
 
-    public SessionDAO() {
-        //logger.log(Level.INFO, "Abierta conexion");
+    Session ss;
+    public SessionUtil() {
+        ss = getSessionI();
+        logger.log(Level.INFO, "Abierta conexion");
     }
 
-    public static Session getSession(){
-        Session ss = (Session) tt.get();
+    public static Session getSessionI(){
+        Session rss = tt.get();
+        if(rss == null){
+            rss = HibernateBS.getSessionFactory().openSession();
+            tt.set(rss);
+        }
+        return rss;
+    }
+
+    public Session getSession(){
         if(ss == null){
-            ss = HibernateBS.getSessionFactory().openSession();
-            tt.set(ss);
+            ss = getSessionI();
         }
         return ss;
     }
@@ -55,8 +58,8 @@ public class SessionDAO implements AutoCloseable{
 
     @Override
     public void close() throws Exception {
-        getSession().disconnect();
+        ss.close();
         tt.set(null);
-        //logger.log(Level.INFO, "Cerrada conexion");
+        logger.log(Level.INFO, "Cerrada conexion");
     }
 }

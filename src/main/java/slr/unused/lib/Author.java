@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package slr.lib;
+package slr.unused.lib;
 
 import java.lang.annotation.Documented;
 

@@ -18,6 +18,9 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
+import slr.unused.lib.Author;
 
 @Author(name="Aaron", version="1.0.0")
 public class Utility{
@@ -67,5 +70,19 @@ public class Utility{
             }
         }
         return names;
+    }
+
+    public static <T> T unproxy(T entity){
+        if (entity == null) {
+        throw new
+           NullPointerException("Entity passed for initialization is null");
+        }
+
+        Hibernate.initialize(entity);
+        if (entity instanceof HibernateProxy) {
+            entity = (T) ((HibernateProxy) entity).getHibernateLazyInitializer().getImplementation();
+        }
+
+        return entity;
     }
 }

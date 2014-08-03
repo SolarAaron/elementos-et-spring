@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package slr.lib;
+package slr.unused.lib;
 
 @Author(name="Aaron", version="1.0.0")
 public enum RequestType {

@@ -6,7 +6,7 @@
 
 package slr.epoo.web.unused.mdl;
 
-import slr.lib.Author;
+import slr.unused.lib.Author;
 
 @Author(name = "Aaron", version="0.1.0")
 public interface IPersona {

@@ -2,15 +2,16 @@ package slr.epoo.web.mdl;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -19,36 +20,33 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
-    @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
-    @NamedQuery(name = "Usuario.findBySalario", query = "SELECT u FROM Usuario u WHERE u.salario = :salario")})
-public class Usuario implements Serializable {
+    @NamedQuery(name = "Nomina.findAll", query = "SELECT n FROM Nomina n"),
+    @NamedQuery(name = "Nomina.findById", query = "SELECT n FROM Nomina n WHERE n.id = :id"),
+    @NamedQuery(name = "Nomina.findBySaldo", query = "SELECT n FROM Nomina n WHERE n.saldo = :saldo")})
+public class Nomina implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     private Integer id;
-    @Size(max = 40)
-    private String nombre;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Float salario;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idU")
-    private Nomina nomina;
+    private Float saldo;
+    @JoinColumn(name = "id_u", referencedColumnName = "id")
+    @OneToOne(optional = false)
+    private Usuario idU;
 
-    public Usuario() {
+    public Nomina() {
     }
 
-    public Usuario(Integer id) {
+    public Nomina(Integer id, Float saldo, Usuario idU) {
+        this.id = id;
+        this.saldo = saldo;
+        this.idU = idU;
+    }
+
+    public Nomina(Integer id) {
         this.id = id;
     }
-
-    public Usuario(Integer id, String nombre, Float salario) {
-        this.id = id;
-        this.nombre = nombre;
-        this.salario = salario;
-    }
-
 
     public Integer getId() {
         return id;
@@ -58,28 +56,22 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public Float getSaldo() {
+        return saldo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setSaldo(Float saldo) {
+        this.saldo = saldo;
     }
 
-    public Float getSalario() {
-        return salario;
+    @XmlTransient
+    @JsonIgnore
+    public Usuario getIdU() {
+        return idU;
     }
 
-    public void setSalario(Float salario) {
-        this.salario = salario;
-    }
-
-    public Nomina getNomina() {
-        return nomina;
-    }
-
-    public void setNomina(Nomina nomina) {
-        this.nomina = nomina;
+    public void setIdU(Usuario idU) {
+        this.idU = idU;
     }
 
     @Override
@@ -92,10 +84,10 @@ public class Usuario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Usuario)) {
+        if (!(object instanceof Nomina)) {
             return false;
         }
-        Usuario other = (Usuario) object;
+        Nomina other = (Nomina) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -104,7 +96,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "slr.epoo.web.mdl.Usuario[ id=" + id + " ]";
+        return "slr.epoo.web.mdl.Nomina[ id=" + id + " ]";
     }
 
 }
