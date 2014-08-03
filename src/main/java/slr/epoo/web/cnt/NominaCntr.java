@@ -81,7 +81,7 @@ public class NominaCntr {
         return status;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/nomina/{identidad}", headers = {"Accept=text/html"})
+    @RequestMapping(method = RequestMethod.POST, value = "/nomina/{identidad}", headers = {"Accept=Application/JSON"})
     public @ResponseBody String insertNomina(@PathVariable Integer identidad) throws IOException{
         String res;
         JsonFactory fc = new JsonFactory(null);
