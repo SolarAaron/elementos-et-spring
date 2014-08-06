@@ -40,13 +40,27 @@ public class UsuarioCntr {
         try{
             UsuarioDaoV2 disp = new UsuarioDaoV2();
             ArrayList<Usuario> ulist = disp.list();
-            u.setId(ulist.get(ulist.size() - 1).getId() + 1);
+            if(!ulist.isEmpty()){
+                u.setId(ulist.get(ulist.size() - 1).getId() + 1);
+            } else {
+                u.setId(1);
+            }
             disp.save(u);
         } catch(Exception ee){
-            logger.log(Level.WARNING, "Algo anda mal: {0}", ee.getMessage());
+            logger.log(Level.WARNING, "Algo anda mal: {0}{1}", new Object[]{ee.getMessage(), ee.getMessage()});
             status = "algo anda mal: " + ee.getMessage();
         }
         return status;
+    }
+
+    public static Usuario searchUser(Integer id){
+        Usuario res = new Usuario();
+        try{
+            res = new UsuarioDaoV2().search(id, true);
+        } catch(Exception e){
+            logger.log(Level.WARNING, "Algo anda mal...");
+        }
+        return res;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/usuario/{nombre}/{salario}", headers = {"Accept=Application/JSON"})
@@ -60,6 +74,19 @@ public class UsuarioCntr {
             res = out.toString();
         }
         logger.log(Level.INFO, res);
+        return res;
+    }
+
+    @RequestMapping(method= RequestMethod.GET, value="/usuario/{nombre}", headers={"Accept=Application/JSON"})
+    public @ResponseBody String getUser(@PathVariable Integer id) throws Exception{
+        String res;
+        JsonFactory fc = new JsonFactory(null);
+        ObjectMapper ob = new ObjectMapper(fc);
+        try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
+            JsonGenerator jg = ob.getJsonFactory().createJsonGenerator(out);
+            jg.writeObject(Collections.singletonMap("object", UsuarioCntr.searchUser(id)));
+            res = out.toString();
+        }
         return res;
     }
 

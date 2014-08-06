@@ -53,7 +53,6 @@ public class NominaCntr {
     public static String putNomina(Nomina u){
         String status = "ok";
         try{
-            UsuarioDaoV2 udisp = new UsuarioDaoV2();
             NominaDaoV2 ndisp = new NominaDaoV2();
             Usuario usr = u.getIdU();
 
@@ -68,7 +67,11 @@ public class NominaCntr {
                     ndisp.update(u);
                 } else {
                     ArrayList<Nomina> nlist = ndisp.list();
-                    u.setId(nlist.get(nlist.size() - 1).getId() + 1);
+                    if(!nlist.isEmpty()){
+                        u.setId(nlist.get(nlist.size() - 1).getId() + 1);
+                    } else {
+                        u.setId(1);
+                    }
                     u.setSaldo(usr.getSalario());
                     ndisp.save(u);
                 }
