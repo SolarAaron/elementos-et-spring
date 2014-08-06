@@ -3,6 +3,13 @@
   <persistence-unit name="slr.eloo.web_mvn-web-spr_war_1.0PU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>slr.epoo.web.mdl.Usuario</class>
+    <class>slr.epoo.web.mdl.Empleado</class>
+    <class>slr.epoo.web.mdl.Cliente</class>
+    <class>slr.epoo.web.mdl.Producto</class>
+    <class>slr.epoo.web.mdl.Venta</class>
+    <class>slr.epoo.web.mdl.Nomina</class>
+    <class>slr.epoo.web.mdl.Detalleventa</class>
+    <class>slr.epoo.web.mdl.DetalleVenta</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=convertToNull"/>

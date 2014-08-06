@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import slr.epoo.web.mdl.Empleado;
 import slr.epoo.web.mdl.Nomina;
-import slr.epoo.web.mdl.Usuario;
 
 /**
  *
@@ -26,7 +26,7 @@ import slr.epoo.web.mdl.Usuario;
 public class NominaCntr {
     private static final Logger logger = Logger.getLogger(NominaCntr.class.getName());
 
-    public static ArrayList<Nomina> getNomina(){
+    public static ArrayList<Nomina> getNominas(){
         ArrayList<Nomina> res = new ArrayList<>();
         try{
             res = new NominaDaoV2().list();
@@ -43,7 +43,7 @@ public class NominaCntr {
         ObjectMapper ob = new ObjectMapper(fc);
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
             JsonGenerator jg = ob.getJsonFactory().createJsonGenerator(out);
-            jg.writeObject(Collections.singletonMap("object", NominaCntr.getNomina()));
+            jg.writeObject(Collections.singletonMap("object", NominaCntr.getNominas()));
             res = out.toString();
         }
         logger.log(Level.INFO, res);
@@ -54,11 +54,11 @@ public class NominaCntr {
         String status = "ok";
         try{
             NominaDaoV2 ndisp = new NominaDaoV2();
-            Usuario usr = u.getIdU();
+            Empleado usr = u.getIdE();
 
             if(usr != null){
                 if(usr.getNomina() != null){
-                    u.setId(usr.getNomina().getId());
+                    u.setIdN(usr.getNomina().getIdN());
                     if(usr.getNomina().getSaldo() != null){
                         u.setSaldo(usr.getNomina().getSaldo() + usr.getSalario());
                     } else {
@@ -68,9 +68,9 @@ public class NominaCntr {
                 } else {
                     ArrayList<Nomina> nlist = ndisp.list();
                     if(!nlist.isEmpty()){
-                        u.setId(nlist.get(nlist.size() - 1).getId() + 1);
+                        u.setIdN(nlist.get(nlist.size() - 1).getIdN() + 1);
                     } else {
-                        u.setId(1);
+                        u.setIdN(1);
                     }
                     u.setSaldo(usr.getSalario());
                     ndisp.save(u);
@@ -92,7 +92,7 @@ public class NominaCntr {
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
             JsonGenerator jg = ob.getJsonFactory().createJsonGenerator(out);
             try {
-                jg.writeObject(Collections.singletonMap("object", NominaCntr.putNomina(new Nomina(0, 0.0f, new UsuarioDaoV2().search(identidad, true)))));
+                jg.writeObject(Collections.singletonMap("object", NominaCntr.putNomina(new Nomina(0, 0.0f, new EmpleadoDaoV2().search(identidad, true)))));
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, null, ex);
                 jg.writeObject(Collections.singletonMap("object", "Error"));

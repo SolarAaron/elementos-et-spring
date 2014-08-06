@@ -6,7 +6,12 @@
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/solar?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
-    <mapping class="slr.epoo.web.mdl.Usuario"></mapping>
+    <property name="hibernate.show_sql">true</property>
+    <mapping class="slr.epoo.web.mdl.Empleado"></mapping>
     <mapping class="slr.epoo.web.mdl.Nomina"></mapping>
+    <mapping class="slr.epoo.web.mdl.Cliente"></mapping>
+    <mapping class="slr.epoo.web.mdl.Producto"></mapping>
+    <mapping class="slr.epoo.web.mdl.Venta"></mapping>
+    <mapping class="slr.epoo.web.mdl.DetalleVenta"></mapping>
   </session-factory>
 </hibernate-configuration>
