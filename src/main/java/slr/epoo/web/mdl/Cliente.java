@@ -20,7 +20,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
- * @author Aaron
+ * @author Aaron Torres <solaraaron@gmail.com>
  */
 @Entity
 @XmlRootElement
@@ -33,9 +33,10 @@ public class Cliente implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id_c")
+    @Column(name = "id_c", nullable = false)
     private Integer idC;
     @Size(max = 40)
+    @Column(length = 40)
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idC")
     private List<Venta> ventaList;

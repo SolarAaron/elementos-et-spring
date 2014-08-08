@@ -10,18 +10,18 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Aaron
+ * @author Aaron Torres <solaraaron@gmail.com>
  */
 @Embeddable
 public class DetalleVentaPK implements Serializable {
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id_v")
+    @Column(name = "id_v", nullable = false)
     private int idV;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 5)
-    @Column(name = "cod_p")
+    @Column(name = "cod_p", nullable = false, length = 5)
     private String codP;
 
     public DetalleVentaPK() {

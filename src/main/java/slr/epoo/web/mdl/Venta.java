@@ -25,7 +25,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
- * @author Aaron
+ * @author Aaron Torres <solaraaron@gmail.com>
  */
 @Entity
 @XmlRootElement
@@ -38,18 +38,19 @@ public class Venta implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id_v")
+    @Column(name = "id_v", nullable = false)
     private Integer idV;
     @Basic(optional = false)
     @NotNull
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
     private List<DetalleVenta> detalleVentaList;
-    @JoinColumn(name = "id_e", referencedColumnName = "id_e")
+    @JoinColumn(name = "id_e", referencedColumnName = "id_e", nullable = false)
     @ManyToOne(optional = false)
     private Empleado idE;
-    @JoinColumn(name = "id_c", referencedColumnName = "id_c")
+    @JoinColumn(name = "id_c", referencedColumnName = "id_c", nullable = false)
     @ManyToOne(optional = false)
     private Cliente idC;
 

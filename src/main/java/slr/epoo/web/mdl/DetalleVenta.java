@@ -2,6 +2,7 @@
 package slr.epoo.web.mdl;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -15,7 +16,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Aaron
+ * @author Aaron Torres <solaraaron@gmail.com>
  */
 @Entity
 @XmlRootElement
@@ -31,15 +32,17 @@ public class DetalleVenta implements Serializable {
     protected DetalleVentaPK detalleVentaPK;
     @Basic(optional = false)
     @NotNull
+    @Column(nullable = false)
     private int cantidad;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Column(name = "precio_actual")
-    private long precioActual;
-    @JoinColumn(name = "cod_p", referencedColumnName = "cod_p", insertable = false, updatable = false)
+    @Column(name = "precio_actual", nullable = false, precision = 10, scale = 2)
+    private BigDecimal precioActual;
+    @JoinColumn(name = "cod_p", referencedColumnName = "cod_p", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Producto producto;
-    @JoinColumn(name = "id_v", referencedColumnName = "id_v", insertable = false, updatable = false)
+    @JoinColumn(name = "id_v", referencedColumnName = "id_v", nullable = false, insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Venta venta;
 
@@ -50,7 +53,7 @@ public class DetalleVenta implements Serializable {
         this.detalleVentaPK = detalleVentaPK;
     }
 
-    public DetalleVenta(DetalleVentaPK detalleVentaPK, int cantidad, long precioActual) {
+    public DetalleVenta(DetalleVentaPK detalleVentaPK, int cantidad, BigDecimal precioActual) {
         this.detalleVentaPK = detalleVentaPK;
         this.cantidad = cantidad;
         this.precioActual = precioActual;
@@ -76,11 +79,11 @@ public class DetalleVenta implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public long getPrecioActual() {
+    public BigDecimal getPrecioActual() {
         return precioActual;
     }
 
-    public void setPrecioActual(long precioActual) {
+    public void setPrecioActual(BigDecimal precioActual) {
         this.precioActual = precioActual;
     }
 

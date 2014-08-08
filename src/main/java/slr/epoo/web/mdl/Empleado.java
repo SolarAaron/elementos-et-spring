@@ -2,6 +2,7 @@
 package slr.epoo.web.mdl;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -19,10 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-/**
- *
- * @author Aaron
- */
+
 @Entity
 @XmlRootElement
 @NamedQueries({
@@ -35,12 +33,14 @@ public class Empleado implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id_e")
+    @Column(name = "id_e", nullable = false)
     private Integer idE;
     @Size(max = 40)
+    @Column(length = 40)
     private String nombre;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    private Float salario;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal salario;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idE")
     private Nomina nomina;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idE")
@@ -53,12 +53,11 @@ public class Empleado implements Serializable {
         this.idE = idE;
     }
 
-    public Empleado(Integer idE, String nombre, Float salario) {
+    public Empleado(Integer idE, String nombre, BigDecimal salario) {
         this.idE = idE;
         this.nombre = nombre;
         this.salario = salario;
     }
-    
 
     public Integer getIdE() {
         return idE;
@@ -76,11 +75,11 @@ public class Empleado implements Serializable {
         this.nombre = nombre;
     }
 
-    public Float getSalario() {
+    public BigDecimal getSalario() {
         return salario;
     }
 
-    public void setSalario(Float salario) {
+    public void setSalario(BigDecimal salario) {
         this.salario = salario;
     }
 

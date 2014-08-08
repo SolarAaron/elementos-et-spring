@@ -2,6 +2,7 @@ package slr.epoo.web.cnt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -21,7 +22,7 @@ import slr.epoo.web.mdl.Empleado;
  * @author Aaron
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/empleados")
 public class EmpleadoCntr {
     private static final Logger logger = Logger.getLogger(EmpleadoCntr.class.getName());
 
@@ -85,8 +86,8 @@ public class EmpleadoCntr {
         return status;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/empleado/{nombre}/{salario}", headers = {"Accept=Application/JSON"})
-    public @ResponseBody String insertUser(@PathVariable String nombre, @PathVariable Float salario) throws IOException{
+    @RequestMapping(method = RequestMethod.POST, value = "/{nombre}/{salario}", headers = {"Accept=Application/JSON"})
+    public @ResponseBody String insertUser(@PathVariable String nombre, @PathVariable BigDecimal salario) throws IOException{
         String res;
         JsonFactory fc = new JsonFactory(null);
         ObjectMapper ob = new ObjectMapper(fc);
@@ -99,7 +100,7 @@ public class EmpleadoCntr {
         return res;
     }
 
-    @RequestMapping(method= RequestMethod.GET, value="/empleado/{id}", headers={"Accept=Application/JSON"})
+    @RequestMapping(method= RequestMethod.GET, value="/{id}", headers={"Accept=Application/JSON"})
     public @ResponseBody String getUser(@PathVariable Integer id) throws Exception{
         String res;
         JsonFactory fc = new JsonFactory(null);
@@ -113,7 +114,7 @@ public class EmpleadoCntr {
         return res;
     }
 
-    @RequestMapping(method= RequestMethod.DELETE, value="/empleado/{id}", headers={"Accept=Application/JSON"})
+    @RequestMapping(method= RequestMethod.DELETE, value="/{id}", headers={"Accept=Application/JSON"})
     public @ResponseBody String removeUser(@PathVariable Integer id) throws Exception{
         String res;
         JsonFactory fc = new JsonFactory(null);
@@ -127,7 +128,7 @@ public class EmpleadoCntr {
         return res;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value="/empleados", headers = {"Accept=Application/JSON"})
+    @RequestMapping(method = RequestMethod.GET, value="", headers = {"Accept=Application/JSON"})
     public @ResponseBody String listUsers() throws IOException{
         String res;
         JsonFactory fc = new JsonFactory(null);

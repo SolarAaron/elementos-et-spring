@@ -2,6 +2,7 @@
 package slr.epoo.web.mdl;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -19,7 +20,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
- * @author Aaron
+ * @author Aaron Torres <solaraaron@gmail.com>
  */
 @Entity
 @XmlRootElement
@@ -34,15 +35,18 @@ public class Producto implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 5)
-    @Column(name = "cod_p")
+    @Column(name = "cod_p", nullable = false, length = 5)
     private String codP;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 80)
+    @Column(nullable = false, length = 80)
     private String descripcion;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
-    private long precio;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal precio;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto")
     private List<DetalleVenta> detalleVentaList;
 
@@ -53,7 +57,7 @@ public class Producto implements Serializable {
         this.codP = codP;
     }
 
-    public Producto(String codP, String descripcion, long precio) {
+    public Producto(String codP, String descripcion, BigDecimal precio) {
         this.codP = codP;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -75,11 +79,11 @@ public class Producto implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public long getPrecio() {
+    public BigDecimal getPrecio() {
         return precio;
     }
 
-    public void setPrecio(long precio) {
+    public void setPrecio(BigDecimal precio) {
         this.precio = precio;
     }
 

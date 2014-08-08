@@ -2,6 +2,7 @@ package slr.epoo.web.cnt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -22,7 +23,7 @@ import slr.epoo.web.mdl.Nomina;
  * @author Aaron Torres <solaraaron@gmail.com>
  */
 @Controller
-@RequestMapping("/")
+@RequestMapping("/nominas")
 public class NominaCntr {
     private static final Logger logger = Logger.getLogger(NominaCntr.class.getName());
 
@@ -36,7 +37,7 @@ public class NominaCntr {
         return res;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value="/nominas", headers = {"Accept=Application/JSON"})
+    @RequestMapping(method = RequestMethod.GET, value="", headers = {"Accept=Application/JSON"})
     public @ResponseBody String listNominas() throws IOException{
         String res;
         JsonFactory fc = new JsonFactory(null);
@@ -60,7 +61,7 @@ public class NominaCntr {
                 if(usr.getNomina() != null){
                     u.setIdN(usr.getNomina().getIdN());
                     if(usr.getNomina().getSaldo() != null){
-                        u.setSaldo(usr.getNomina().getSaldo() + usr.getSalario());
+                        u.setSaldo(usr.getNomina().getSaldo().add(usr.getSalario()));
                     } else {
                         u.setSaldo(usr.getSalario());
                     }
@@ -84,7 +85,7 @@ public class NominaCntr {
         return status;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/nomina/{identidad}", headers = {"Accept=Application/JSON"})
+    @RequestMapping(method = RequestMethod.POST, value = "/{identidad}", headers = {"Accept=Application/JSON"})
     public @ResponseBody String insertNomina(@PathVariable Integer identidad) throws IOException{
         String res;
         JsonFactory fc = new JsonFactory(null);
@@ -92,7 +93,7 @@ public class NominaCntr {
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
             JsonGenerator jg = ob.getJsonFactory().createJsonGenerator(out);
             try {
-                jg.writeObject(Collections.singletonMap("object", NominaCntr.putNomina(new Nomina(0, 0.0f, new EmpleadoDaoV2().search(identidad, true)))));
+                jg.writeObject(Collections.singletonMap("object", NominaCntr.putNomina(new Nomina(0, BigDecimal.ZERO, new EmpleadoDaoV2().search(identidad, true)))));
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, null, ex);
                 jg.writeObject(Collections.singletonMap("object", "Error"));
