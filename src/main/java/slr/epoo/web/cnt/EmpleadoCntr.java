@@ -72,7 +72,7 @@ public class EmpleadoCntr {
         }
         return res;
     }
-    
+
     public static String deleteUser(Integer id){
         String status = "ok";
         try{
@@ -92,7 +92,7 @@ public class EmpleadoCntr {
         ObjectMapper ob = new ObjectMapper(fc);
         try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
             JsonGenerator jg = ob.getJsonFactory().createJsonGenerator(out);
-            jg.writeObject(Collections.singletonMap("object", EmpleadoCntr.putUser(new Empleado(0, nombre, salario))));
+            jg.writeObject(Collections.singletonMap("object", EmpleadoCntr.putUser(new Empleado(null, nombre, salario))));
             res = out.toString();
         }
         logger.log(Level.INFO, res);
@@ -112,7 +112,7 @@ public class EmpleadoCntr {
         logger.log(Level.INFO, res);
         return res;
     }
-    
+
     @RequestMapping(method= RequestMethod.DELETE, value="/empleado/{id}", headers={"Accept=Application/JSON"})
     public @ResponseBody String removeUser(@PathVariable Integer id) throws Exception{
         String res;
