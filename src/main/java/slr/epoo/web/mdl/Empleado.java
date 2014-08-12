@@ -8,6 +8,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,19 +16,24 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-
+/**
+ *
+ * @author Aaron Torres <solaraaron@gmail.com>
+ */
 @Entity
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Empleado.findAll", query = "SELECT e FROM Empleado e"),
     @NamedQuery(name = "Empleado.findByIdE", query = "SELECT e FROM Empleado e WHERE e.idE = :idE"),
     @NamedQuery(name = "Empleado.findByNombre", query = "SELECT e FROM Empleado e WHERE e.nombre = :nombre"),
-    @NamedQuery(name = "Empleado.findBySalario", query = "SELECT e FROM Empleado e WHERE e.salario = :salario")})
+    @NamedQuery(name = "Empleado.findBySalario", query = "SELECT e FROM Empleado e WHERE e.salario = :salario"),
+    @NamedQuery(name = "Empleado.findByPassword", query = "SELECT e FROM Empleado e WHERE e.password = :password")})
 public class Empleado implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,10 +47,15 @@ public class Empleado implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(precision = 10, scale = 2)
     private BigDecimal salario;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
+    @Column(nullable = false, length = 40)
+    private String password;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idE", fetch = FetchType.EAGER)
+    private List<Venta> ventaList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idE")
     private Nomina nomina;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idE")
-    private List<Venta> ventaList;
 
     public Empleado() {
     }
@@ -53,11 +64,19 @@ public class Empleado implements Serializable {
         this.idE = idE;
     }
 
-    public Empleado(Integer idE, String nombre, BigDecimal salario) {
+    public Empleado(Integer idE, String password) {
+        this.idE = idE;
+        this.password = password;
+    }
+
+    public Empleado(Integer idE, String nombre, BigDecimal salario, String password) {
         this.idE = idE;
         this.nombre = nombre;
         this.salario = salario;
+        this.password = password;
     }
+
+
 
     public Integer getIdE() {
         return idE;
@@ -83,22 +102,28 @@ public class Empleado implements Serializable {
         this.salario = salario;
     }
 
-    public Nomina getNomina() {
-        return nomina;
+    public String getPassword() {
+        return password;
     }
 
-    public void setNomina(Nomina nomina) {
-        this.nomina = nomina;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    @XmlTransient
-    @JsonIgnore
     public List<Venta> getVentaList() {
         return ventaList;
     }
 
     public void setVentaList(List<Venta> ventaList) {
         this.ventaList = ventaList;
+    }
+
+    public Nomina getNomina() {
+        return nomina;
+    }
+
+    public void setNomina(Nomina nomina) {
+        this.nomina = nomina;
     }
 
     @Override
@@ -125,5 +150,5 @@ public class Empleado implements Serializable {
     public String toString() {
         return "slr.epoo.web.mdl.Empleado[ idE=" + idE + " ]";
     }
-    
+
 }

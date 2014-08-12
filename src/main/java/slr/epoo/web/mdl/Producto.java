@@ -121,5 +121,5 @@ public class Producto implements Serializable {
     public String toString() {
         return "slr.epoo.web.mdl.Producto[ codP=" + codP + " ]";
     }
-    
+
 }

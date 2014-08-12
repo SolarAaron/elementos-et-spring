@@ -76,5 +76,5 @@ public class DetalleVentaPK implements Serializable {
     public String toString() {
         return "slr.epoo.web.mdl.DetalleVentaPK[ idV=" + idV + ", codP=" + codP + " ]";
     }
-    
+
 }

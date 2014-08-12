@@ -13,6 +13,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -95,6 +97,8 @@ public class DetalleVenta implements Serializable {
         this.producto = producto;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Venta getVenta() {
         return venta;
     }
@@ -127,5 +131,5 @@ public class DetalleVenta implements Serializable {
     public String toString() {
         return "slr.epoo.web.mdl.DetalleVenta[ detalleVentaPK=" + detalleVentaPK + " ]";
     }
-    
+
 }

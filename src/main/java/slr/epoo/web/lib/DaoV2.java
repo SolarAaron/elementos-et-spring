@@ -13,5 +13,5 @@ public interface DaoV2<Entity, Key extends Serializable>{
     public Entity search(Key kk, boolean unproxy) throws Exception;
     public void delete(Key kk) throws Exception; //Delete by key
     public void delete(Entity ee) throws Exception; // Delete by whole object
-    public ArrayList<Entity> list() throws Exception;
+    public ArrayList<Entity> list(boolean unproxy) throws Exception;
 }

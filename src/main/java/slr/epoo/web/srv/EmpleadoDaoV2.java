@@ -1,4 +1,4 @@
-package slr.epoo.web.cnt;
+package slr.epoo.web.srv;
 
 import slr.epoo.web.lib.DaoV2Impl;
 import slr.epoo.web.mdl.Empleado;

@@ -1,5 +1,5 @@
 
-package slr.epoo.web.cnt;
+package slr.epoo.web.srv;
 
 import slr.epoo.web.lib.DaoV2Impl;
 import slr.epoo.web.mdl.DetalleVenta;
@@ -14,5 +14,5 @@ public class DetalleVentaDaoV2 extends DaoV2Impl<DetalleVenta, DetalleVentaPK>{
     public DetalleVentaDaoV2() {
         super(DetalleVenta.class);
     }
-    
+
 }

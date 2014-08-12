@@ -86,14 +86,21 @@ public class DaoV2Impl<Entity, Key extends Serializable> implements DaoV2<Entity
     }
 
     @Override
-    public ArrayList<Entity> list() throws Exception{
+    public ArrayList<Entity> list(boolean unproxy) throws Exception{
         ArrayList<Entity> ret = new ArrayList<>();
         try(SessionUtil disp = new SessionUtil()){
             if (ss == null){
                 ss = disp.getSession();
             }
             ss.beginTransaction();
-            ret = (ArrayList<Entity>) ss.createCriteria(cc).list();
+            if(unproxy){
+                ArrayList<Entity> tmplist = (ArrayList<Entity>) ss.createCriteria(cc).list();
+                for(Entity x: tmplist){
+                    ret.add(Utility.unproxy(x));
+                }
+            }else {
+                ret = (ArrayList<Entity>) ss.createCriteria(cc).list();
+            }
             ss.getTransaction().commit();
         } finally {
             ss = null;

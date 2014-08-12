@@ -1,15 +1,10 @@
 package slr.epoo.web.cnt;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import slr.epoo.web.mdl.Empleado;
 import slr.epoo.web.mdl.Nomina;
+import slr.epoo.web.srv.EmpleadoDaoV2;
+import slr.epoo.web.srv.NominaDaoV2;
 
 /**
  *
@@ -24,34 +21,22 @@ import slr.epoo.web.mdl.Nomina;
  */
 @Controller
 @RequestMapping("/nominas")
-public class NominaCntr {
+public class NominaCntr extends ControllerBase<Nomina, Integer>{
     private static final Logger logger = Logger.getLogger(NominaCntr.class.getName());
 
-    public static ArrayList<Nomina> getNominas(){
+    @Override
+    public ArrayList<Nomina> get(){
         ArrayList<Nomina> res = new ArrayList<>();
         try{
-            res = new NominaDaoV2().list();
+            res = new NominaDaoV2().list(true);
         } catch(Exception e){
             logger.log(Level.WARNING, "Excepcion en getNomina: {0}", e.getMessage());
         }
         return res;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value="", headers = {"Accept=Application/JSON"})
-    public @ResponseBody String listNominas() throws IOException{
-        String res;
-        JsonFactory fc = new JsonFactory(null);
-        ObjectMapper ob = new ObjectMapper(fc);
-        try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
-            JsonGenerator jg = ob.getJsonFactory().createJsonGenerator(out);
-            jg.writeObject(Collections.singletonMap("object", NominaCntr.getNominas()));
-            res = out.toString();
-        }
-        logger.log(Level.INFO, res);
-        return res;
-    }
-
-    public static String putNomina(Nomina u){
+    @Override
+    public String put(Nomina u){
         String status = "ok";
         try{
             NominaDaoV2 ndisp = new NominaDaoV2();
@@ -67,7 +52,7 @@ public class NominaCntr {
                     }
                     ndisp.update(u);
                 } else {
-                    ArrayList<Nomina> nlist = ndisp.list();
+                    ArrayList<Nomina> nlist = ndisp.list(true);
                     if(!nlist.isEmpty()){
                         u.setIdN(nlist.get(nlist.size() - 1).getIdN() + 1);
                     } else {
@@ -85,22 +70,46 @@ public class NominaCntr {
         return status;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/{identidad}", headers = {"Accept=Application/JSON"})
-    public @ResponseBody String insertNomina(@PathVariable Integer identidad) throws IOException{
-        String res;
-        JsonFactory fc = new JsonFactory(null);
-        ObjectMapper ob = new ObjectMapper(fc);
-        try(ByteArrayOutputStream out = new ByteArrayOutputStream()){
-            JsonGenerator jg = ob.getJsonFactory().createJsonGenerator(out);
-            try {
-                jg.writeObject(Collections.singletonMap("object", NominaCntr.putNomina(new Nomina(0, BigDecimal.ZERO, new EmpleadoDaoV2().search(identidad, true)))));
-            } catch (Exception ex) {
-                logger.log(Level.SEVERE, null, ex);
-                jg.writeObject(Collections.singletonMap("object", "Error"));
-            }
-            res = out.toString();
+    public Nomina search(Integer id){
+        Nomina res = null;
+        try{
+            res = new NominaDaoV2().search(id, true);
+        } catch(Exception e){
+            logger.log(Level.WARNING, "Algo anda mal...");
         }
-        logger.log(Level.INFO, res);
-        return res;
+        return null;
+    }
+
+    @Override
+    public String delete(Integer id){
+        String status = "ok";
+        try{
+            NominaDaoV2 disp = new NominaDaoV2();
+            disp.delete(id);
+        } catch(Exception ee){
+            logger.log(Level.WARNING, "Algo anda mal: {0}{1}", new Object[]{ee.getMessage(), ee.getMessage()});
+            status = "algo anda mal: " + ee.getMessage();
+        }
+        return status;
+    }
+
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT}, value = "/{identidad}", headers = {"Accept=Application/JSON"})
+    public @ResponseBody String insertNomina(@PathVariable Integer identidad) throws Exception{
+        return jsonWrite(put(new Nomina(0, BigDecimal.ZERO, new EmpleadoDaoV2().search(identidad, true))));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value="/{id}", headers={"Accept=Application/JSON"})
+    public @ResponseBody String getNomina(@PathVariable Integer id) throws IOException{
+        return jsonWrite(search(id));
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value="/{id}", headers={"Accept=Application/JSON"})
+    public @ResponseBody String removeNomina(@PathVariable Integer id) throws IOException{
+        return jsonWrite(delete(id));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value="", headers = {"Accept=Application/JSON"})
+    public @ResponseBody String listNominas() throws IOException{
+        return jsonWrite(get());
     }
 }

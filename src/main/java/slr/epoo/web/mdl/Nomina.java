@@ -19,7 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-
+/**
+ *
+ * @author Aaron Torres <solaraaron@gmail.com>
+ */
 @Entity
 @Table(uniqueConstraints = {
     @UniqueConstraint(columnNames = {"id_e"})})
@@ -54,7 +57,7 @@ public class Nomina implements Serializable {
         this.saldo = saldo;
         this.idE = idE;
     }
-
+    
     public Integer getIdN() {
         return idN;
     }
@@ -71,8 +74,8 @@ public class Nomina implements Serializable {
         this.saldo = saldo;
     }
 
-    @JsonIgnore
     @XmlTransient
+    @JsonIgnore
     public Empleado getIdE() {
         return idE;
     }
@@ -105,5 +108,5 @@ public class Nomina implements Serializable {
     public String toString() {
         return "slr.epoo.web.mdl.Nomina[ idN=" + idN + " ]";
     }
-    
+
 }
