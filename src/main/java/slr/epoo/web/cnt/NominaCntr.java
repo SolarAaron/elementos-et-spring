@@ -21,18 +21,11 @@ import slr.epoo.web.srv.NominaDaoV2;
  */
 @Controller
 @RequestMapping("/nominas")
-public class NominaCntr extends ControllerBase<Nomina, Integer>{
+public class NominaCntr extends ControllerBase<Nomina, Integer, NominaDaoV2>{
     private static final Logger logger = Logger.getLogger(NominaCntr.class.getName());
 
-    @Override
-    public ArrayList<Nomina> get(){
-        ArrayList<Nomina> res = new ArrayList<>();
-        try{
-            res = new NominaDaoV2().list(true);
-        } catch(Exception e){
-            logger.log(Level.WARNING, "Excepcion en getNomina: {0}", e.getMessage());
-        }
-        return res;
+    public NominaCntr() {
+        super(NominaDaoV2.class);
     }
 
     @Override
@@ -65,29 +58,6 @@ public class NominaCntr extends ControllerBase<Nomina, Integer>{
         } catch(Exception ee){
             ee.printStackTrace(System.err);
             logger.log(Level.WARNING, "Algo anda mal: {0}", ee.getMessage());
-            status = "algo anda mal: " + ee.getMessage();
-        }
-        return status;
-    }
-
-    public Nomina search(Integer id){
-        Nomina res = null;
-        try{
-            res = new NominaDaoV2().search(id, true);
-        } catch(Exception e){
-            logger.log(Level.WARNING, "Algo anda mal...");
-        }
-        return null;
-    }
-
-    @Override
-    public String delete(Integer id){
-        String status = "ok";
-        try{
-            NominaDaoV2 disp = new NominaDaoV2();
-            disp.delete(id);
-        } catch(Exception ee){
-            logger.log(Level.WARNING, "Algo anda mal: {0}{1}", new Object[]{ee.getMessage(), ee.getMessage()});
             status = "algo anda mal: " + ee.getMessage();
         }
         return status;

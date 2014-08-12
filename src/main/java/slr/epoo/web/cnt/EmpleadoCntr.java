@@ -20,18 +20,11 @@ import slr.epoo.web.srv.EmpleadoDaoV2;
  */
 @Controller
 @RequestMapping("/empleados")
-public class EmpleadoCntr extends ControllerBase<Empleado, Integer>{
+public class EmpleadoCntr extends ControllerBase<Empleado, Integer, EmpleadoDaoV2>{
     private static final Logger logger = Logger.getLogger(EmpleadoCntr.class.getName());
 
-    @Override
-    protected ArrayList<Empleado> get(){
-        ArrayList<Empleado> res = new ArrayList<>();
-        try{
-            res = new EmpleadoDaoV2().list(true);
-        } catch(Exception x){
-            logger.log(Level.WARNING, "Algo anda mal: {0}", x.getMessage());
-        }
-        return res;
+    public EmpleadoCntr() {
+        super(EmpleadoDaoV2.class);
     }
 
     @Override
@@ -56,30 +49,6 @@ public class EmpleadoCntr extends ControllerBase<Empleado, Integer>{
                 u.setIdE(1);
                 disp.save(u);
             }
-        } catch(Exception ee){
-            logger.log(Level.WARNING, "Algo anda mal: {0}{1}", new Object[]{ee.getMessage(), ee.getMessage()});
-            status = "algo anda mal: " + ee.getMessage();
-        }
-        return status;
-    }
-
-    @Override
-    public Empleado search(Integer id){
-        Empleado res = null;
-        try{
-            res = new EmpleadoDaoV2().search(id, true);
-        } catch(Exception e){
-            logger.log(Level.WARNING, "Algo anda mal...");
-        }
-        return res;
-    }
-
-    @Override
-    public String delete(Integer id){
-        String status = "ok";
-        try{
-            EmpleadoDaoV2 disp = new EmpleadoDaoV2();
-            disp.delete(id);
         } catch(Exception ee){
             logger.log(Level.WARNING, "Algo anda mal: {0}{1}", new Object[]{ee.getMessage(), ee.getMessage()});
             status = "algo anda mal: " + ee.getMessage();

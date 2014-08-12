@@ -2,6 +2,7 @@
 package slr.epoo.web.mdl;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Size;
 public class ClientePK implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_c", nullable = false)
-    private int idC;
+    private Integer idC;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
@@ -26,16 +27,16 @@ public class ClientePK implements Serializable {
     public ClientePK() {
     }
 
-    public ClientePK(int idC, String nomUsuario) {
+    public ClientePK(Integer idC, String nomUsuario) {
         this.idC = idC;
         this.nomUsuario = nomUsuario;
     }
 
-    public int getIdC() {
+    public Integer getIdC() {
         return idC;
     }
 
-    public void setIdC(int idC) {
+    public void setIdC(Integer idC) {
         this.idC = idC;
     }
 
@@ -50,7 +51,7 @@ public class ClientePK implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idC;
+        hash += idC;
         hash += (nomUsuario != null ? nomUsuario.hashCode() : 0);
         return hash;
     }
@@ -62,7 +63,7 @@ public class ClientePK implements Serializable {
             return false;
         }
         ClientePK other = (ClientePK) object;
-        if (this.idC != other.idC) {
+        if (!Objects.equals(this.idC, other.idC)) {
             return false;
         }
         if ((this.nomUsuario == null && other.nomUsuario != null) || (this.nomUsuario != null && !this.nomUsuario.equals(other.nomUsuario))) {

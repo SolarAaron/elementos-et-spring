@@ -1,27 +1,26 @@
 package slr.epoo.web.cnt;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import slr.epoo.web.mdl.Cliente;
 import slr.epoo.web.mdl.ClientePK;
 import slr.epoo.web.srv.ClienteDaoV2;
 
 @Controller
 @RequestMapping("/clientes")
-public class ClienteCntr extends ControllerBase<Cliente, ClientePK> {
+public class ClienteCntr extends ControllerBase<Cliente, ClientePK, ClienteDaoV2> {
     private static final Logger logger = Logger.getLogger(ClienteCntr.class.getName());
 
-    @Override
-    protected ArrayList<Cliente> get() {
-        try{
-            return new ClienteDaoV2().list(true);
-        } catch(Exception e){
-            logger.log(Level.WARNING, "Algo anda mal: {0}", e.getMessage());
-            return new ArrayList<>();
-        }
+    public ClienteCntr() {
+        super(ClienteDaoV2.class);
     }
 
     @Override
@@ -30,22 +29,45 @@ public class ClienteCntr extends ControllerBase<Cliente, ClientePK> {
         try{
             ClienteDaoV2 disp = new ClienteDaoV2();
             ArrayList<Cliente> clist = disp.list(true);
-            for(Cliente cli: clist){
-
+            if(!clist.isEmpty()){
+                for(Cliente cli: clist){
+                    if(cli.getClientePK().getNomUsuario().equals(c.getClientePK().getNomUsuario())){
+                        c.setClientePK(cli.getClientePK());
+                    }
+                }
+                if(c.getClientePK().getIdC() == null){
+                    c.setClientePK(new ClientePK(clist.get(clist.size() - 1).getClientePK().getIdC() + 1, c.getClientePK().getNomUsuario()));
+                    disp.save(c);
+                } else {
+                    disp.update(c);
+                }
+            } else {
+                c.setClientePK(new ClientePK(1, c.getClientePK().getNomUsuario()));
+                disp.save(c);
             }
         } catch(Exception e){
             logger.log(Level.WARNING, "Algo anda mal: {0}", e.getMessage());
         }
         return status;
     }
-
-    @Override
-    protected Cliente search(ClientePK key) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    
+    @RequestMapping(method = RequestMethod.GET, value = "", headers={"Accept=Application/JSON"})
+    public @ResponseBody String listClientes() throws IOException{
+        return jsonWrite(get());
+    }
+    
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}/{cli}", headers={"Accept=Application/JSON"})
+    public @ResponseBody String searchCliente(@PathVariable Integer id, @PathVariable String cli) throws IOException{
+        return jsonWrite(search(new ClientePK(id, cli)));
+    }
+    
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}/{cli}", headers={"Accept=Application/JSON"})
+    public @ResponseBody String deleteCliente(@PathVariable Integer id, @PathVariable String cli) throws IOException{
+        return jsonWrite(delete(new ClientePK(id, cli)));
     }
 
-    @Override
-    protected String delete(ClientePK key) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT}, value = "/{id}/{cli}", headers = {"Accept=Application/JSON"})
+    public  @ResponseBody String insertCliente(@PathVariable Integer id, @PathVariable String cli,@RequestParam(value="password") String password) throws IOException{
+        return jsonWrite(put(new Cliente(new ClientePK(id, cli), password)));
     }
 }

@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.IndexColumn;
 
 /**
  *
@@ -57,7 +58,7 @@ public class Venta implements Serializable {
         @JoinColumn(name = "nom_usuario", referencedColumnName = "nom_usuario", nullable = false)})
     @ManyToOne(optional = false)
     private Cliente cliente;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
     private List<DetalleVenta> detalleVentaList;
 
     public Venta() {
