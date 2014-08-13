@@ -21,6 +21,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -54,6 +58,7 @@ public class Venta implements Serializable {
         @JoinColumn(name = "nom_usuario", referencedColumnName = "nom_usuario", nullable = false)})
     @ManyToOne(optional = false)
     private Cliente idC;
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
     private List<DetalleVenta> detalleVentaList;
 
@@ -99,6 +104,8 @@ public class Venta implements Serializable {
         this.status = status;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public Empleado getIdE() {
         return idE;
     }

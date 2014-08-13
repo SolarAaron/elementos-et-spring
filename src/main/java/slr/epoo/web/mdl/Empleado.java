@@ -8,7 +8,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,8 +18,8 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 /**
  *
@@ -52,7 +51,8 @@ public class Empleado implements Serializable {
     @Size(min = 1, max = 40)
     @Column(nullable = false, length = 40)
     private String password;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idE", fetch = FetchType.EAGER)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idE")
     private List<Venta> ventaList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "idE")
     private Nomina nomina;

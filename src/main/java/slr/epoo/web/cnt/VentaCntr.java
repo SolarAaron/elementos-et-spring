@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,15 +16,14 @@ import slr.epoo.web.mdl.DetalleVenta;
 import slr.epoo.web.mdl.DetalleVentaPK;
 import slr.epoo.web.mdl.Empleado;
 import slr.epoo.web.mdl.Venta;
-import slr.epoo.web.srv.ClienteDaoV2;
 import slr.epoo.web.srv.DetalleVentaDaoV2;
-import slr.epoo.web.srv.EmpleadoDaoV2;
 import slr.epoo.web.srv.VentaDaoV2;
 
 /**
  *
  * @author Aaron Torres <solaraaron@gmail.com>
  */
+@Controller
 @RequestMapping(value="/ventas")
 public class VentaCntr extends ControllerBase<Venta, Integer, VentaDaoV2> {
     private static final Logger logger = Logger.getLogger(VentaCntr.class.getName());
