@@ -21,7 +21,7 @@ import slr.epoo.web.lib.DaoV2;
  */
 public abstract class ControllerBase<T, K extends Serializable, D extends DaoV2<T, K>> {
     private static final Logger logger = Logger.getLogger(ControllerBase.class.getName());
-    
+
     private final Class<D> daoType;
 
     public ControllerBase(Class<D> daoType) {
@@ -49,7 +49,9 @@ public abstract class ControllerBase<T, K extends Serializable, D extends DaoV2<
             return new ArrayList<>();
         }
     }
+
     protected abstract String put(T u);
+
     protected  T search(K id){
         T res = null;
         try{
@@ -59,6 +61,7 @@ public abstract class ControllerBase<T, K extends Serializable, D extends DaoV2<
         }
         return res;
     }
+
     protected String delete(K key){
         String status = "ok";
         try{

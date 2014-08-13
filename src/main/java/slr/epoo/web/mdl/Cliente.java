@@ -45,7 +45,7 @@ public class Cliente implements Serializable {
     @Size(min = 1, max = 40)
     @Column(nullable = false, length = 40)
     private String password;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idC")
     private List<Venta> ventaList;
 
     public Cliente() {

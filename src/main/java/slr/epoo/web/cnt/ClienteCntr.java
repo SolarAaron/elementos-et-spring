@@ -45,22 +45,23 @@ public class ClienteCntr extends ControllerBase<Cliente, ClientePK, ClienteDaoV2
                 c.setClientePK(new ClientePK(1, c.getClientePK().getNomUsuario()));
                 disp.save(c);
             }
-        } catch(Exception e){
-            logger.log(Level.WARNING, "Algo anda mal: {0}", e.getMessage());
+        } catch(Exception ee){
+            logger.log(Level.WARNING, "Algo anda mal: {0}", ee.getMessage());
+            status = "algo anda mal: " + ee.getMessage();
         }
         return status;
     }
-    
+
     @RequestMapping(method = RequestMethod.GET, value = "", headers={"Accept=Application/JSON"})
     public @ResponseBody String listClientes() throws IOException{
         return jsonWrite(get());
     }
-    
+
     @RequestMapping(method = RequestMethod.GET, value = "/{id}/{cli}", headers={"Accept=Application/JSON"})
     public @ResponseBody String searchCliente(@PathVariable Integer id, @PathVariable String cli) throws IOException{
         return jsonWrite(search(new ClientePK(id, cli)));
     }
-    
+
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}/{cli}", headers={"Accept=Application/JSON"})
     public @ResponseBody String deleteCliente(@PathVariable Integer id, @PathVariable String cli) throws IOException{
         return jsonWrite(delete(new ClientePK(id, cli)));

@@ -8,7 +8,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,9 +21,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.annotations.IndexColumn;
 
 /**
  *
@@ -57,7 +53,7 @@ public class Venta implements Serializable {
         @JoinColumn(name = "id_c", referencedColumnName = "id_c", nullable = false),
         @JoinColumn(name = "nom_usuario", referencedColumnName = "nom_usuario", nullable = false)})
     @ManyToOne(optional = false)
-    private Cliente cliente;
+    private Cliente idC;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "venta")
     private List<DetalleVenta> detalleVentaList;
 
@@ -71,6 +67,12 @@ public class Venta implements Serializable {
     public Venta(Integer idV, Date fecha) {
         this.idV = idV;
         this.fecha = fecha;
+    }
+
+    public Venta(Integer idV, Empleado idE, Cliente idC) {
+        this.idV = idV;
+        this.idE = idE;
+        this.idC = idC;
     }
 
     public Integer getIdV() {
@@ -105,12 +107,12 @@ public class Venta implements Serializable {
         this.idE = idE;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Cliente getIdC() {
+        return idC;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setIdC(Cliente idC) {
+        this.idC = idC;
     }
 
     public List<DetalleVenta> getDetalleVentaList() {

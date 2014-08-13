@@ -61,6 +61,11 @@ public class DetalleVenta implements Serializable {
         this.precioActual = precioActual;
     }
 
+    public DetalleVenta(DetalleVentaPK detalleVentaPK, int cantidad) {
+        this.detalleVentaPK = detalleVentaPK;
+        this.cantidad = cantidad;
+    }
+    
     public DetalleVenta(int idV, String codP) {
         this.detalleVentaPK = new DetalleVentaPK(idV, codP);
     }
