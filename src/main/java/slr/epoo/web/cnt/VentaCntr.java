@@ -1,3 +1,4 @@
+
 package slr.epoo.web.cnt;
 
 import java.io.IOException;
@@ -24,22 +25,22 @@ import slr.epoo.web.srv.VentaDaoV2;
  * @author Aaron Torres <solaraaron@gmail.com>
  */
 @Controller
-@RequestMapping(value="/ventas")
-public class VentaCntr extends ControllerBase<Venta, Integer, VentaDaoV2> {
+@RequestMapping(value = "/ventas")
+public class VentaCntr extends ControllerBase<Venta, Integer, VentaDaoV2>{
     private static final Logger logger = Logger.getLogger(VentaCntr.class.getName());
 
-    public VentaCntr() {
+    public VentaCntr(){
         super(VentaDaoV2.class);
     }
 
-    public class DetalleCntr extends ControllerBase<DetalleVenta, DetalleVentaPK, DetalleVentaDaoV2> {
+    public class DetalleCntr extends ControllerBase<DetalleVenta, DetalleVentaPK, DetalleVentaDaoV2>{
 
-        public DetalleCntr() {
+        public DetalleCntr(){
             super(DetalleVentaDaoV2.class);
         }
 
         @Override
-        protected String put(DetalleVenta u) {
+        protected String put(DetalleVenta u){
             String status = "ok";
             try{
                 DetalleVentaDaoV2 disp = new DetalleVentaDaoV2();
@@ -61,7 +62,7 @@ public class VentaCntr extends ControllerBase<Venta, Integer, VentaDaoV2> {
                 } else {
                     disp.save(u);
                 }
-            }catch(Exception ee){
+            } catch(Exception ee){
                 logger.log(Level.WARNING, "Algo anda mal: {0}", ee.getMessage());
                 status = "algo anda mal: " + ee.getMessage();
             }
@@ -70,7 +71,7 @@ public class VentaCntr extends ControllerBase<Venta, Integer, VentaDaoV2> {
     }
 
     @Override
-    protected String put(Venta u) {
+    protected String put(Venta u){
         String status = "ok";
         try{
             VentaDaoV2 disp = new VentaDaoV2();
@@ -92,45 +93,52 @@ public class VentaCntr extends ControllerBase<Venta, Integer, VentaDaoV2> {
                 u.setIdV(1);
                 disp.save(u);
             }
-        }catch(Exception ee){
+        } catch(Exception ee){
             logger.log(Level.WARNING, "Algo anda mal: {0}", ee.getMessage());
             status = "algo anda mal: " + ee.getMessage();
         }
         return status;
     }
 
-    @RequestMapping(value="", method= RequestMethod.GET, headers={"Accept=Application/JSON"})
-    public @ResponseBody String listVentas() throws IOException{
+    @RequestMapping(value = "", method = RequestMethod.GET, headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String listVentas() throws IOException{
         return jsonWrite(get());
     }
 
-    @RequestMapping(value="/{id}", method = RequestMethod.GET, headers={"Accept=Application/JSON"})
-    public @ResponseBody String searchVenta(@PathVariable Integer id) throws IOException{
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String searchVenta(@PathVariable Integer id) throws IOException{
         return jsonWrite(search(id));
     }
 
-    @RequestMapping(value="", method={RequestMethod.POST, RequestMethod.PUT}, headers={"Accept=Application/JSON"})
-    public @ResponseBody String insertVenta(@RequestParam Integer ide, @RequestParam Integer idc, @RequestParam String nc) throws IOException{
-        return jsonWrite(put(new Venta(null, new Empleado(ide), new Cliente(new ClientePK(idc, nc)))));
+    @RequestMapping(value = "", method = {RequestMethod.POST, RequestMethod.PUT}, headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String insertVenta(@RequestParam Integer idE, @RequestParam Integer idC, @RequestParam String nomUsuario) throws IOException{
+        return jsonWrite(put(new Venta(null, new Empleado(idE), new Cliente(new ClientePK(idC, nomUsuario)))));
     }
 
-    @RequestMapping(value="/{id}", method = RequestMethod.DELETE, headers={"Accept=Application/JSON"})
-    public @ResponseBody String deleteVenta(@PathVariable Integer id) throws IOException{
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String deleteVenta(@PathVariable Integer id) throws IOException{
         return jsonWrite(delete(id));
     }
 
-    @RequestMapping(value="/{id}/{cod}", method = RequestMethod.GET, headers={"Accept=Application/JSON"})
-    public @ResponseBody String detalleVenta(@PathVariable Integer id, @PathVariable String cod) throws IOException{
+    @RequestMapping(value = "/{id}/{cod}", method = RequestMethod.GET, headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String detalleVenta(@PathVariable Integer id, @PathVariable String cod) throws IOException{
         return jsonWrite(new DetalleCntr().search(new DetalleVentaPK(id, cod)));
     }
 
-    @RequestMapping(value="/{id}/{cod}", method = RequestMethod.DELETE, headers={"Accept=Application/JSON"})
-    public @ResponseBody String removeDetalleVenta(@PathVariable Integer id, @PathVariable String cod) throws IOException{
+    @RequestMapping(value = "/{id}/{cod}", method = RequestMethod.DELETE, headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String removeDetalleVenta(@PathVariable Integer id, @PathVariable String cod) throws IOException{
         return jsonWrite(new DetalleCntr().delete(new DetalleVentaPK(id, cod)));
     }
 
-    @RequestMapping(value="/{id}/{cod}/{cant}", method = {RequestMethod.POST, RequestMethod.PUT}, headers={"Accept=Application/JSON"})
-    public @ResponseBody String insertDetalleVenta(@PathVariable Integer id, @PathVariable String cod, @PathVariable Integer cant) throws IOException{
+    @RequestMapping(value = "/{id}/{cod}/{cant}", method = {RequestMethod.POST, RequestMethod.PUT}, headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String insertDetalleVenta(@PathVariable Integer id, @PathVariable String cod, @PathVariable Integer cant) throws IOException{
         return jsonWrite(new DetalleCntr().put(new DetalleVenta(new DetalleVentaPK(id, cod), cant)));
     }
 }
