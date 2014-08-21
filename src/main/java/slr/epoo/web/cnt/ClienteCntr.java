@@ -67,8 +67,8 @@ public class ClienteCntr extends ControllerBase<Cliente, ClientePK, ClienteDaoV2
         return jsonWrite(delete(new ClientePK(id, cli)));
     }
 
-    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT}, value = "/{id}/{cli}", headers = {"Accept=Application/JSON"})
-    public  @ResponseBody String insertCliente(@PathVariable Integer id, @PathVariable String cli,@RequestParam(value="password") String password) throws IOException{
-        return jsonWrite(put(new Cliente(new ClientePK(id, cli), password)));
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT}, value = "/{cli}", headers = {"Accept=Application/JSON"})
+    public  @ResponseBody String insertCliente(@PathVariable String cli, @RequestParam(value="nombre") String nombre, @RequestParam(value="password") String password) throws IOException{
+        return jsonWrite(put(new Cliente(new ClientePK(null, cli), nombre, password)));
     }
 }

@@ -19,10 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-/**
- *
- * @author Aaron Torres <solaraaron@gmail.com>
- */
+
 @Entity
 @Table(uniqueConstraints = {
     @UniqueConstraint(columnNames = {"nom_usuario"})})
@@ -60,6 +57,12 @@ public class Cliente implements Serializable {
         this.password = password;
     }
 
+    public Cliente(ClientePK clientePK, String nombre, String password) {
+        this.clientePK = clientePK;
+        this.nombre = nombre;
+        this.password = password;
+    }
+    
     public Cliente(int idC, String nomUsuario) {
         this.clientePK = new ClientePK(idC, nomUsuario);
     }
