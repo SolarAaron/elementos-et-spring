@@ -1,3 +1,4 @@
+
 package slr.epoo.web.cnt;
 
 import java.io.IOException;
@@ -16,15 +17,15 @@ import slr.epoo.web.srv.ClienteDaoV2;
 
 @Controller
 @RequestMapping("/clientes")
-public class ClienteCntr extends ControllerBase<Cliente, ClientePK, ClienteDaoV2> {
+public class ClienteCntr extends ControllerBase<Cliente, ClientePK, ClienteDaoV2>{
     private static final Logger logger = Logger.getLogger(ClienteCntr.class.getName());
 
-    public ClienteCntr() {
+    public ClienteCntr(){
         super(ClienteDaoV2.class);
     }
 
     @Override
-    protected String put(Cliente c) {
+    protected String put(Cliente c){
         String status = "ok";
         try{
             ClienteDaoV2 disp = new ClienteDaoV2();
@@ -52,23 +53,28 @@ public class ClienteCntr extends ControllerBase<Cliente, ClientePK, ClienteDaoV2
         return status;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "", headers={"Accept=Application/JSON"})
-    public @ResponseBody String listClientes() throws IOException{
+    @RequestMapping(method = RequestMethod.GET, value = "", headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String listClientes() throws IOException{
         return jsonWrite(get());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}/{cli}", headers={"Accept=Application/JSON"})
-    public @ResponseBody String searchCliente(@PathVariable Integer id, @PathVariable String cli) throws IOException{
-        return jsonWrite(search(new ClientePK(id, cli)));
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}", headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String searchCliente(@PathVariable Integer id) throws Exception{
+        return jsonWrite(search(new ClienteDaoV2().restrict("clientePK.idC", id, true).get(0).getClientePK()));
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}/{cli}", headers={"Accept=Application/JSON"})
-    public @ResponseBody String deleteCliente(@PathVariable Integer id, @PathVariable String cli) throws IOException{
-        return jsonWrite(delete(new ClientePK(id, cli)));
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}", headers = {"Accept=Application/JSON"})
+    public @ResponseBody
+    String deleteCliente(@PathVariable Integer id) throws Exception{
+        ClientePK clientePK = new ClienteDaoV2().restrict("clientePK.idC", id, true).get(0).getClientePK();
+        return jsonWrite(delete(clientePK));
     }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT}, value = "/{cli}", headers = {"Accept=Application/JSON"})
-    public  @ResponseBody String insertCliente(@PathVariable String cli, @RequestParam(value="nombre") String nombre, @RequestParam(value="password") String password) throws IOException{
+    public @ResponseBody
+    String insertCliente(@PathVariable String cli, @RequestParam(value = "nombre") String nombre, @RequestParam(value = "password") String password) throws IOException{
         return jsonWrite(put(new Cliente(new ClientePK(null, cli), nombre, password)));
     }
 }

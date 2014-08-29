@@ -18,6 +18,8 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -33,7 +35,7 @@ import org.hibernate.annotations.LazyCollectionOption;
     @NamedQuery(name = "Empleado.findByNombre", query = "SELECT e FROM Empleado e WHERE e.nombre = :nombre"),
     @NamedQuery(name = "Empleado.findBySalario", query = "SELECT e FROM Empleado e WHERE e.salario = :salario"),
     @NamedQuery(name = "Empleado.findByPassword", query = "SELECT e FROM Empleado e WHERE e.password = :password")})
-public class Empleado implements Serializable {
+public class Empleado implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,102 +54,102 @@ public class Empleado implements Serializable {
     @Column(nullable = false, length = 40)
     private String password;
     @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idE")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "idE")
     private List<Venta> ventaList;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "idE")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "idE")
     private Nomina nomina;
 
-    public Empleado() {
+    public Empleado(){
     }
 
-    public Empleado(Integer idE) {
+    public Empleado(Integer idE){
         this.idE = idE;
     }
 
-    public Empleado(Integer idE, String password) {
+    public Empleado(Integer idE, String password){
         this.idE = idE;
         this.password = password;
     }
 
-    public Empleado(Integer idE, String nombre, BigDecimal salario, String password) {
+    public Empleado(Integer idE, String nombre, BigDecimal salario, String password){
         this.idE = idE;
         this.nombre = nombre;
         this.salario = salario;
         this.password = password;
     }
 
-
-
-    public Integer getIdE() {
+    public Integer getIdE(){
         return idE;
     }
 
-    public void setIdE(Integer idE) {
+    public void setIdE(Integer idE){
         this.idE = idE;
     }
 
-    public String getNombre() {
+    public String getNombre(){
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    public void setNombre(String nombre){
         this.nombre = nombre;
     }
 
-    public BigDecimal getSalario() {
+    public BigDecimal getSalario(){
         return salario;
     }
 
-    public void setSalario(BigDecimal salario) {
+    public void setSalario(BigDecimal salario){
         this.salario = salario;
     }
 
-    public String getPassword() {
+    public String getPassword(){
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password){
         this.password = password;
     }
 
-    public List<Venta> getVentaList() {
+    @XmlTransient
+    @JsonIgnore
+    public List<Venta> getVentaList(){
         return ventaList;
     }
 
-    public void setVentaList(List<Venta> ventaList) {
+    public void setVentaList(List<Venta> ventaList){
         this.ventaList = ventaList;
     }
 
-    public Nomina getNomina() {
+    public Nomina getNomina(){
         return nomina;
     }
 
-    public void setNomina(Nomina nomina) {
+    public void setNomina(Nomina nomina){
         this.nomina = nomina;
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode(){
         int hash = 0;
         hash += (idE != null ? idE.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(Object object){
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Empleado)) {
+        if(!(object instanceof Empleado)){
             return false;
         }
-        Empleado other = (Empleado) object;
-        if ((this.idE == null && other.idE != null) || (this.idE != null && !this.idE.equals(other.idE))) {
+        Empleado other = (Empleado)object;
+        if((this.idE == null && other.idE != null) || (this.idE != null && !this.idE.equals(other.idE))){
             return false;
         }
         return true;
     }
 
     @Override
-    public String toString() {
+    public String toString(){
         return "slr.epoo.web.mdl.Empleado[ idE=" + idE + " ]";
     }
 

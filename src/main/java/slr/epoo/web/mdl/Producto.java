@@ -47,7 +47,7 @@ public class Producto implements Serializable {
     @NotNull
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "producto")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "producto")
     private List<DetalleVenta> detalleVentaList;
 
     public Producto() {

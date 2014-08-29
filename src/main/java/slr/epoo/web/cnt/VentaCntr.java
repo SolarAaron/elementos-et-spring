@@ -2,7 +2,9 @@
 package slr.epoo.web.cnt;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import slr.epoo.web.mdl.DetalleVenta;
 import slr.epoo.web.mdl.DetalleVentaPK;
 import slr.epoo.web.mdl.Empleado;
 import slr.epoo.web.mdl.Venta;
+import slr.epoo.web.srv.ClienteDaoV2;
 import slr.epoo.web.srv.DetalleVentaDaoV2;
 import slr.epoo.web.srv.VentaDaoV2;
 
@@ -76,6 +79,12 @@ public class VentaCntr extends ControllerBase<Venta, Integer, VentaDaoV2>{
         try{
             VentaDaoV2 disp = new VentaDaoV2();
             ArrayList<Venta> vlist = disp.list(true);
+            ArrayList<Cliente> restrict = new ClienteDaoV2().restrict("clientePK.idC", u.getIdC().getClientePK().getIdC(), true);
+            if(restrict.size() > 1){
+                throw new Exception("Wrong filter: " + restrict.toString());
+            }
+            u.setIdC(restrict.get(0));
+            u.setFecha(new Timestamp(new Date().getTime()));
 
             if(!vlist.isEmpty()){
                 for(Venta v: vlist){
@@ -85,9 +94,9 @@ public class VentaCntr extends ControllerBase<Venta, Integer, VentaDaoV2>{
                 }
                 if(u.getIdV() == null){
                     u.setIdV(vlist.get(vlist.size() - 1).getIdV() + 1);
-                    disp.update(u);
-                } else {
                     disp.save(u);
+                } else {
+                    disp.update(u);
                 }
             } else {
                 u.setIdV(1);
@@ -114,8 +123,8 @@ public class VentaCntr extends ControllerBase<Venta, Integer, VentaDaoV2>{
 
     @RequestMapping(value = "", method = {RequestMethod.POST, RequestMethod.PUT}, headers = {"Accept=Application/JSON"})
     public @ResponseBody
-    String insertVenta(@RequestParam Integer idE, @RequestParam Integer idC, @RequestParam String nomUsuario) throws IOException{
-        return jsonWrite(put(new Venta(null, new Empleado(idE), new Cliente(new ClientePK(idC, nomUsuario)))));
+    String insertVenta(@RequestParam Integer idE, @RequestParam Integer idC) throws IOException{
+        return jsonWrite(put(new Venta(null, new Empleado(idE), new Cliente(new ClientePK(idC, null)))));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE, headers = {"Accept=Application/JSON"})
